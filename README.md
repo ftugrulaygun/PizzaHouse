@@ -12,8 +12,5 @@ Maven Version: 3.9.12 (https://maven.apache.org/download.cgi)
 
 **Clone the repository or download the files**
 **Install Dependencies**
-**Database Setup**
--Ensure there is a package named 'database' in the project root.
--Application checks for a file at 'database/pizza.db'
 
-Run the 'Main.java'
+
