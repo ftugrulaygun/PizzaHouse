@@ -11,7 +11,7 @@ import java.sql.Statement;
 public class DatabaseManager{
     private Connection connection;
 
-    public void addIngredient(String name, double prive, int quantity, String dbPath){
+    public void addIngredient(String name, double prive, int quantity, String unit, String DBpath){
         String sql = "INSERT INTO ingredients (name, price, quantity, unit) VALUES " +
                     "('Mozzarella Cheese', 2.50, 1000, 'grams')," +
                     "('Pepperoni', 3.00, 500, 'slices')," +
@@ -19,10 +19,10 @@ public class DatabaseManager{
                     "('Bell Peppers', 1.20, 400, 'grams')," +
                     "('Olives', 1.80, 250, 'grams');";
 
-        String url = "jdbc:sqlite" + dbPath; 
+        String url = "jdbc:sqlite" + DBpath;
         
-        try(Connection conn = DriverManager.getConnection(url); Statement stmt = conn.createStatement()){
-            
+        try(Connection connection = DriverManager.getConnection(url); Statement stmt = connection.createStatement()){
+            stmt.execute(sql);
         }catch(SQLException exception){
             System.out.println("Error adding " + name + ": " + exception.getMessage());
         }
