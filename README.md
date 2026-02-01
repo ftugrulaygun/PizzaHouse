@@ -19,4 +19,22 @@ Maven Version: 3.9.12 (https://maven.apache.org/download.cgi)
 
 **Install Dependencies**
 
+# How to run/test
+
+You can test the code by running Main.java file.
+
+by the example down below, you can test the code by adding the sample these code structures(functions can be chosen specifically by the user):
+''
+
+        pizza = new PepperoniDecorator(pizza);
+        System.out.println(pizza.getDescription());
+        System.out.println("Cost: $" + pizza.getCost());
+
+        pizza = new OliveDecorator(pizza);
+        System.out.println(pizza.getDescription());
+        System.out.println("Cost: $" + pizza.getCost());
+
+        pizza = new MushroomDecorator(pizza);
+        System.out.println(pizza.getDescription());
+        System.out.println("Cost: $" + pizza.getCost());'''
 

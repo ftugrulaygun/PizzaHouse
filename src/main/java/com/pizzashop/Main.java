@@ -14,17 +14,5 @@ public class Main{
         pizza = new CheeseDecorator(pizza);
         System.out.println(pizza.getDescription());
         System.out.println("Cost: $" + pizza.getCost());
-
-        pizza = new PepperoniDecorator(pizza);
-        System.out.println(pizza.getDescription());
-        System.out.println("Cost: $" + pizza.getCost());
-
-        pizza = new OliveDecorator(pizza);
-        System.out.println(pizza.getDescription());
-        System.out.println("Cost: $" + pizza.getCost());
-
-        pizza = new MushroomDecorator(pizza);
-        System.out.println(pizza.getDescription());
-        System.out.println("Cost: $" + pizza.getCost());
     }
 }
