@@ -1,84 +1,188 @@
 package com.pizzashop.database;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.DriverPropertyInfo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DatabaseManager{
+public abstract class DatabaseManager{
     private Connection connection;
+    private static final String DB_URL = "jdbc:sqlite:database/pizzashop.db";
 
-    public void addIngredient(String name, double prive, int quantity, String unit, String DBpath){
+    public void addIngredient(String name, double prive, int quantity, String unit){
         String sql = "INSERT INTO ingredients (name, price, quantity, unit) VALUES " +
                     "('Mozzarella Cheese', 2.50, 1000, 'grams')," +
                     "('Pepperoni', 3.00, 500, 'slices')," +
                     "('Mushrooms', 1.50, 300, 'grams')," +
                     "('Bell Peppers', 1.20, 400, 'grams')," +
                     "('Olives', 1.80, 250, 'grams');";
-
-        String url = "jdbc:sqlite" + DBpath;
         
-        try(Connection connection = DriverManager.getConnection(url); Statement stmt = connection.createStatement()){
-            stmt.execute(sql);
+        try(Connection connection = DriverManager.getConnection(DB_URL)){
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.executeUpdate();
         }catch(SQLException exception){
             System.out.println("Error adding " + name + ": " + exception.getMessage());
-        }
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+
+                }catch(SQLException exception){
+                    System.out.println("Error closing connection: " + exception.getMessage());
+                }
+
+            }
     }
 
     public void connect(String dbPath){
-        String url = "jdbc:sqlite" + dbPath;
-        String sql = """
-            CREATE TABLE IF NOT EXISTS ingredients (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                price DECIMAL(10, 2) NOT NULL,
-                quantity INTEGER NOT NULL,
-                unit TEXT NOT NULL
-            );
-            
-            CREATE TABLE IF NOT EXISTS preset_pizzas (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL UNIQUE,
-                description TEXT
-            );
-            
-            CREATE TABLE IF NOT EXISTS preset_pizza_ingredients (
-                preset_pizza_id INTEGER,
-                ingredient_id INTEGER,
-                quantity INTEGER NOT NULL,
-                FOREIGN KEY (preset_pizza_id) REFERENCES preset_pizzas(id),
-                FOREIGN KEY (ingredient_id) REFERENCES ingredients(id),
-                PRIMARY KEY (preset_pizza_id, ingredient_id)
-            );
-            """;
-                            
-
-        try{
-            this.connection = DriverManager.getConnection(url);
-
-            System.out.println("Successfully connected to: " + dbPath);
-
-            Statement stmt = connection.createStatement();
-
-            if(connection != null){
-                stmt.execute(sql);
-            }
+        String url = "jdbc:sqlite:" + dbPath;
+        try(Connection connection = DriverManager.getConnection(url)){
+            System.out.println("Connection established to: " + url);
         }catch(SQLException exception){
-            System.out.println("Connection failed" + exception.getMessage());
+            System.out.println("Connection failed to: " + url);
         }finally{
             try{
-                if(this.connection != null){
-                    this.connection.close();
+                if(connection != null){
+                    connection.close();
                 }
-            }catch(SQLException exception2){
-                    System.out.println("Error closing connection: " + exception2.getMessage());
-                }
+            }catch(SQLException exception){
+                System.out.println("Closing connection failed to: " + url);
             }
         }
     }
+
+
+
+    
+    public List<Ingredient> getAllIngredients(){
+        List<Ingredient> ingredientList = new ArrayList<>();
+        String sql = "SELECT rowid, * FROM ingredients";
+
+        try(Connection connection = DriverManager.getConnection(DB_URL)){
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()){
+                int id = rs.getInt("rowid");
+                String name = rs.getString("name");
+                double price = rs.getDouble("price");
+                int quantity = rs.getInt("quantity");
+                String unit = rs.getString("unit");
+
+                Ingredient item = new Ingredient(id, name, price, quantity, unit);
+                ingredientList.add(item);
+            }
+        }catch(SQLException exception){
+            System.out.println("Error getting all ingredients: " + exception.getMessage());
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+            }catch(SQLException exception){
+                System.out.println("Error closing connection" + exception.getMessage());
+            }
+        }
+    return ingredientList;
+    }
+
+    public boolean isIngredientAvailable(int id, int requiredQuantity){
+        String sql = "SELECT 1 FROM ingredients WHERE id = ?";
+
+        try(Connection connection = DriverManager.getConnection(DB_URL)){
+            PreparedStatement stmt = connection.prepareStatement(sql);
+
+            stmt.setInt(1, id);
+
+            try(ResultSet rs = stmt.executeQuery()){
+                if(rs.next()){
+                    int quantityInDB = rs.getInt("quantity");
+                    return quantityInDB >= requiredQuantity;
+                }
+            }
+        } catch(SQLException exception){
+            System.out.println("Error checking ingredient: " + exception.getMessage());
+            
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+            }catch(SQLException exception){
+                System.out.println("Error closing connection: "+ exception.getMessage());
+            }
+        }
+    return false;
+    }
+
+    public void updateIngredientQuantity(int id, int newQuantity){
+        String sql = "UPDATE ingredients SET quantity = ? WHERE id = ?";
+
+        try(Connection connection = DriverManager.getConnection(DB_URL)){
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, newQuantity);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+            System.out.println("Quantity updated.");
+        }catch(SQLException exception){
+            System.out.println("Error updating quantity: " + exception.getMessage());
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+            }catch(SQLException exception){
+                System.out.println("Error closing connection: " + exception.getMessage());
+            }
+        }
+    }
+
+    public void initializeTables(){
+        String sql = """ 
+    CREATE TABLE IF NOT EXISTS ingredients (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        price DECIMAL(10, 2) NOT NULL,
+        quantity INTEGER NOT NULL,
+        unit TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS preset_pizzas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL UNIQUE,
+        description TEXT
+    );
+
+    CREATE TABLE IF NOT EXISTS preset_pizza_ingredients (
+        preset_pizza_id INTEGER,
+        ingredient_id INTEGER,
+        quantity INTEGER NOT NULL,
+        FOREIGN KEY (preset_pizza_id) REFERENCES preset_pizzas(id),
+        FOREIGN KEY (ingredient_id) REFERENCES ingredients(id),
+        PRIMARY KEY (preset_pizza_id, ingredient_id)
+    );
+    """;
+        try(Connection connection = DriverManager.getConnection(DB_URL)){
+            Statement stmt = connection.createStatement();
+            stmt.executeUpdate(sql);
+        }catch(SQLException exception){
+            System.out.println("Error connecting to: " + exception.getMessage());
+        }finally{
+            try{
+                if(connection != null){
+                    connection.close();
+                }
+            }catch(SQLException exception){
+                System.out.println("Error closing connection: " + exception.getMessage());
+            }
+        }
+    }
+}
 
 
     
