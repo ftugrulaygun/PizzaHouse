@@ -159,7 +159,7 @@ public class DatabaseManager{
         quantity INTEGER NOT NULL,
         unit TEXT NOT NULL
     );
-
+ 
     CREATE TABLE IF NOT EXISTS preset_pizzas (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL UNIQUE,
