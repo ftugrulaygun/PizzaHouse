@@ -24,7 +24,7 @@ Maven Version: 3.9.12 (https://maven.apache.org/download.cgi)
 You can test the code by running Main.java file.
 
 by the example down below, you can test the code by adding the sample these code structures(functions can be chosen specifically by the user):
-''
+'''
 // Define a new Pizza
         pizza = new PepperoniDecorator(pizza);
         System.out.println(pizza.getDescription());
