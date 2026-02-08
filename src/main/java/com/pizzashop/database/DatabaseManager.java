@@ -14,7 +14,7 @@ public class DatabaseManager{
     private static final String DB_URL = "jdbc:sqlite:database/pizzashop.db";
 
     public void addIngredient(String name, double price, int quantity, String unit){
-        String sql = "INSERT INTO ingredients (name, price, quantity, unit) VALUES (?,?,?,?)";
+        String sql = "INSERT  or IGNORE INTO ingredients (name, price, quantity, unit) VALUES (?,?,?,?)";
         
         try(Connection connection = DriverManager.getConnection(DB_URL)){
             PreparedStatement stmt = connection.prepareStatement(sql);
