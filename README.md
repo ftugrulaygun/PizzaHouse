@@ -19,46 +19,57 @@ Maven Version: 3.9.12 (https://maven.apache.org/download.cgi)
 
 **Install Dependencies**
 
-# How to run/test
+## How to run/test
 
-You can test the code by running Main.java file.
+You can test the code by running the `Main.java` file.
 
-by the example down below, you can test the code by adding the sample these code structures(functions can be chosen specifically by the user):
-'''
-// Define a new Pizza
-        pizza = new PepperoniDecorator(pizza);
-        System.out.println(pizza.getDescription());
-        System.out.println("Cost: $" + pizza.getCost());
+Use the example code below to test both the **Pizza Decorator** pattern and the **Database Manager**. You can choose specific functions to run in your `main` method:
 
-        pizza = new OliveDecorator(pizza);
-        System.out.println(pizza.getDescription());
-        System.out.println("Cost: $" + pizza.getCost());
+```java
+import com.pizzashop.database.DatabaseManager;
+import com.pizzashop.database.Ingredient;
+import java.util.List;
 
-        pizza = new MushroomDecorator(pizza);
-        System.out.println(pizza.getDescription());
-        System.out.println("Cost: $" + pizza.getCost());
+// --- Part 1: Pizza Decorator Pattern ---
+
+// Define a new Pizza (assuming BasePizza or similar exists)
+// Pizza pizza = new BasePizza(); 
+
+pizza = new PepperoniDecorator(pizza);
+System.out.println(pizza.getDescription());
+System.out.println("Cost: $" + pizza.getCost());
+
+pizza = new OliveDecorator(pizza);
+System.out.println(pizza.getDescription());
+System.out.println("Cost: $" + pizza.getCost());
+
+pizza = new MushroomDecorator(pizza);
+System.out.println(pizza.getDescription());
+System.out.println("Cost: $" + pizza.getCost());
+
+
+// --- Part 2: Database Management ---
 
 // 1. Initialize the Database Manager
-        DatabaseManager db = new DatabaseManager();
-        db.initializeTables();
+DatabaseManager db = new DatabaseManager();
+db.initializeTables();
 
 // 2. Add Ingredients (Name, Price, Quantity, Unit)
-        System.out.println("--- Adding Ingredients ---");
-        db.addIngredient("Mozzarella Cheese", 2.50, 1000, "grams");
-        db.addIngredient("Tomato Sauce", 1.20, 500, "ml");
-        db.addIngredient("Pepperoni", 3.00, 50, "slices");
+System.out.println("--- Adding Ingredients ---");
+db.addIngredient("Mozzarella Cheese", 2.50, 1000, "grams");
+db.addIngredient("Tomato Sauce", 1.20, 500, "ml");
+db.addIngredient("Pepperoni", 3.00, 50, "slices");
 
 // 3. Check Stock Levels
-        System.out.println("\n--- Checking Availability ---");
-        boolean hasCheese = db.isIngredientAvailable("Mozzarella Cheese", 200);
-        System.out.println("Is there enough cheese for a pizza (200g)? " + (hasCheese ? "Yes" : "No"));
+System.out.println("\n--- Checking Availability ---");
+boolean hasCheese = db.isIngredientAvailable("Mozzarella Cheese", 200);
+System.out.println("Is there enough cheese for a pizza (200g)? " + (hasCheese ? "Yes" : "No"));
 
 // 4. List All Ingredients
-        System.out.println("\n--- Current Inventory ---");
-        List<Ingredient> inventory = db.getAllIngredients();
-        for (Ingredient item : inventory) {
-            System.out.printf("%s: %d %s ($%.2f)%n", 
-                item.getName(), item.getQuantity(), item.getUnit(), item.getPrice());
-        }'''
-
-
+System.out.println("\n--- Current Inventory ---");
+List<Ingredient> inventory = db.getAllIngredients();
+for (Ingredient item : inventory) {
+    System.out.printf("%s: %d %s ($%.2f)%n", 
+        item.getName(), item.getQuantity(), item.getUnit(), item.getPrice());
+}
+```
