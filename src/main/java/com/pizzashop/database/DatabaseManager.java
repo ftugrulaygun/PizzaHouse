@@ -11,7 +11,15 @@ import java.sql.Statement;
 
 public class DatabaseManager{
     private Connection connection;
-    private static final String DB_URL = "jdbc:sqlite:database/pizzashop.db";
+    private static final String DB_URL;
+
+    static{
+        String projectDir = System.getProperty("user.dir");
+
+        DB_URL = "jdbc:sqlite:" + projectDir + "/database/pizzashop.db";
+
+        System.out.println("Using Database: " + DB_URL);
+    }
 
     public void addIngredient(String name, double price, int quantity, String unit){
         String sql = "INSERT  or IGNORE INTO ingredients (name, price, quantity, unit) VALUES (?,?,?,?)";
@@ -61,14 +69,14 @@ public class DatabaseManager{
     
     public List<Ingredient> getAllIngredients(){
         List<Ingredient> ingredientList = new ArrayList<>();
-        String sql = "SELECT rowid, * FROM ingredients";
+        String sql = "SELECT * FROM ingredients";
 
         try(Connection connection = DriverManager.getConnection(DB_URL)){
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
             while(rs.next()){
-                int id = rs.getInt("rowid");
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 double price = rs.getDouble("price");
                 int quantity = rs.getInt("quantity");
@@ -91,13 +99,13 @@ public class DatabaseManager{
     return ingredientList;
     }
 
-    public boolean isIngredientAvailable(int id, int requiredQuantity){
-        String sql = "SELECT 1 FROM ingredients WHERE id = ?";
+    public boolean isIngredientAvailable(String name, int requiredQuantity){
+        String sql = "SELECT quantity FROM ingredients WHERE name = ?";
 
         try(Connection connection = DriverManager.getConnection(DB_URL)){
             PreparedStatement stmt = connection.prepareStatement(sql);
 
-            stmt.setInt(1, id);
+            stmt.setString(1, name);
 
             try(ResultSet rs = stmt.executeQuery()){
                 if(rs.next()){
