@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public abstract class DatabaseManager{
+public class DatabaseManager{
     private Connection connection;
     private static final String DB_URL = "jdbc:sqlite:database/pizzashop.db";
 
