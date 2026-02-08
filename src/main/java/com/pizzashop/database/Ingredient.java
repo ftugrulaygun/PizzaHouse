@@ -1,6 +1,6 @@
 package com.pizzashop.database;
 
-public class Ingredient extends DatabaseManager{
+public class Ingredient{
     private int id;
     private String name;
     private double price;
