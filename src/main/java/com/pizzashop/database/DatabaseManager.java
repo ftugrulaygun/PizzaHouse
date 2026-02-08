@@ -13,17 +13,17 @@ public class DatabaseManager{
     private Connection connection;
     private static final String DB_URL = "jdbc:sqlite:database/pizzashop.db";
 
-    public void addIngredient(String name, double prive, int quantity, String unit){
-        String sql = "INSERT INTO ingredients (name, price, quantity, unit) VALUES " +
-                    "('Mozzarella Cheese', 2.50, 1000, 'grams')," +
-                    "('Pepperoni', 3.00, 500, 'slices')," +
-                    "('Mushrooms', 1.50, 300, 'grams')," +
-                    "('Bell Peppers', 1.20, 400, 'grams')," +
-                    "('Olives', 1.80, 250, 'grams');";
+    public void addIngredient(String name, double price, int quantity, String unit){
+        String sql = "INSERT INTO ingredients (name, price, quantity, unit) VALUES (?,?,?,?)";
         
         try(Connection connection = DriverManager.getConnection(DB_URL)){
             PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setDouble(2, price);
+            stmt.setInt(3, quantity);
+            stmt.setString(4, unit);
             stmt.executeUpdate();
+            System.out.println("Successfully added: " + name);     
         }catch(SQLException exception){
             System.out.println("Error adding " + name + ": " + exception.getMessage());
         }finally{
