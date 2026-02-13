@@ -33,19 +33,10 @@ import java.util.List;
 // --- Part 1: Pizza Decorator Pattern ---
 
 // Define a new Pizza (assuming BasePizza or similar exists)
-// Pizza pizza = new BasePizza(); 
+ 
 
-pizza = new PepperoniDecorator(pizza);
-System.out.println(pizza.getDescription());
-System.out.println("Cost: $" + pizza.getCost());
-
-pizza = new OliveDecorator(pizza);
-System.out.println(pizza.getDescription());
-System.out.println("Cost: $" + pizza.getCost());
-
-pizza = new MushroomDecorator(pizza);
-System.out.println(pizza.getDescription());
-System.out.println("Cost: $" + pizza.getCost());
+myPizza = IngredientDecorator.createAndEditPizza(myPizza, "Mozzarella");
+myPizza = IngredientDecorator.createAndEditPizza(myPizza, "Pepperoni");
 
 
 // --- Part 2: Database Management ---
