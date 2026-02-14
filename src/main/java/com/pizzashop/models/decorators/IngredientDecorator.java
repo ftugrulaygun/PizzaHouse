@@ -2,6 +2,7 @@ package com.pizzashop.models.decorators;
 import com.pizzashop.models.PizzaDecorator;
 import com.pizzashop.models.Pizza;
 import com.pizzashop.database.Ingredient;
+import com.pizzashop.database.DatabaseManager;
 
 
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.ResultSet;
 
 public class IngredientDecorator extends PizzaDecorator {
     private Ingredient ingredient;
-
+    private DatabaseManager dbManager;
     private static final String DB_URL;
 
     static{
@@ -53,10 +54,15 @@ public class IngredientDecorator extends PizzaDecorator {
         return null;
     }
 
-    public static Pizza createAndEditPizza(Pizza pizza, String IngredientName){
+    public static Pizza createAndEditPizza(Pizza pizza, String IngredientName, int requiredAmount){
         Ingredient ingredient = fetchIngredientFromDB(IngredientName);
 
-        if(ingredient != null && ingredient.getQuantity() > 0){
+        if(ingredient != null && ingredient.getQuantity() >= requiredAmount){
+            int newQuantity = ingredient.getQuantity() - requiredAmount;
+
+            ingredient.setQuantity(newQuantity);
+            int idForIngredient = ingredient.getID();
+            DatabaseManager.updateIngredientQuantity(idForIngredient, newQuantity);
             return new IngredientDecorator(pizza, ingredient);
         } else{
             System.out.println("Cannot add " + IngredientName + ": Out of stock");
