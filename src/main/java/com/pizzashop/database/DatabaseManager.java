@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseManager{
-    private Connection connection;
+    private static Connection connection;
     private static final String DB_URL;
 
     static{
@@ -128,7 +128,7 @@ public class DatabaseManager{
     return false;
     }
 
-    public void updateIngredientQuantity(int id, int newQuantity){
+    public static void updateIngredientQuantity(int id, int newQuantity){
         String sql = "UPDATE ingredients SET quantity = ? WHERE id = ?";
 
         try(Connection connection = DriverManager.getConnection(DB_URL)){
