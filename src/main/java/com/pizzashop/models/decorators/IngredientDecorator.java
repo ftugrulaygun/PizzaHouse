@@ -1,15 +1,15 @@
 package com.pizzashop.models.decorators;
-import com.pizzashop.models.PizzaDecorator;
-import com.pizzashop.models.Pizza;
-import com.pizzashop.database.Ingredient;
-import com.pizzashop.database.DatabaseManager;
-
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.pizzashop.database.DatabaseManager;
+import com.pizzashop.database.Ingredient;
+import com.pizzashop.models.Pizza;
+import com.pizzashop.models.PizzaDecorator;
 
 
 public class IngredientDecorator extends PizzaDecorator {

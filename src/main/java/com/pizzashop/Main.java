@@ -1,10 +1,10 @@
 package com.pizzashop;
 
 import com.pizzashop.database.DatabaseManager;
-import com.pizzashop.database.Ingredient;
 import com.pizzashop.models.BasePizza;
 import com.pizzashop.models.Pizza;
 import com.pizzashop.models.decorators.IngredientDecorator;
+import com.pizzashop.ui.PizzaOrderUI;
 
 public class Main {
     public static void main(String[] args) {
@@ -34,6 +34,18 @@ public class Main {
         System.out.println(myPizza.getCost());
         System.out.println(myPizza2.getDescription());
         System.out.println(myPizza2.getCost());
+
+        PizzaOrderUI frame = new PizzaOrderUI();
+
+        frame.displayIngredients();
+
+        frame.setVisible(true);
+
+
+
+        
+
+
 
         
     }
