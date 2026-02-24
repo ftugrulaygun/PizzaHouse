@@ -1,11 +1,11 @@
 package com.pizzashop.database;
 
 public class Ingredient{
-    private int id;
-    private String name;
+    private final int id;
+    private final String name;
     private double price;
     private int quantity;
-    private String unit;
+    private final String unit;
     
     public Ingredient(int id, String name, double price , int quantity, String unit){
         this.id = id;

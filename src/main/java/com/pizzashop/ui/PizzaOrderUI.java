@@ -29,6 +29,14 @@ public class PizzaOrderUI extends JFrame{
         setTitle("Pizza Order System");
         setSize(500, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        try {
+        this.dbManager = new DatabaseManager();
+        this.dbManager.initializeTables();
+        } catch (Exception exception) {
+            System.err.println("Failed to initialize database: " + exception.getMessage());
+            exception.printStackTrace();
+        }
     }
     public void displayIngredients(){
         List<Ingredient> Ingredients = dbManager.getAllIngredients();

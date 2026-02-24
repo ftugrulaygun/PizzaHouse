@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager{
-    private static Connection connection;
+    
     private static final String DB_URL;
 
     static{
@@ -34,17 +34,7 @@ public class DatabaseManager{
             System.out.println("Successfully added: " + name);     
         }catch(SQLException exception){
             System.out.println("Error adding " + name + ": " + exception.getMessage());
-        }finally{
-            try{
-                if(connection != null){
-                    connection.close();
-                }
-
-                }catch(SQLException exception){
-                    System.out.println("Error closing connection: " + exception.getMessage());
-                }
-
-            }
+        }
     }
 
     public void connect(String dbPath){
@@ -53,14 +43,6 @@ public class DatabaseManager{
             System.out.println("Connection established to: " + url);
         }catch(SQLException exception){
             System.out.println("Connection failed to: " + url);
-        }finally{
-            try{
-                if(connection != null){
-                    connection.close();
-                }
-            }catch(SQLException exception){
-                System.out.println("Closing connection failed to: " + url);
-            }
         }
     }
 
@@ -87,14 +69,6 @@ public class DatabaseManager{
             }
         }catch(SQLException exception){
             System.out.println("Error getting all ingredients: " + exception.getMessage());
-        }finally{
-            try{
-                if(connection != null){
-                    connection.close();
-                }
-            }catch(SQLException exception){
-                System.out.println("Error closing connection" + exception.getMessage());
-            }
         }
     return ingredientList;
     }
@@ -116,14 +90,6 @@ public class DatabaseManager{
         } catch(SQLException exception){
             System.out.println("Error checking ingredient: " + exception.getMessage());
             
-        }finally{
-            try{
-                if(connection != null){
-                    connection.close();
-                }
-            }catch(SQLException exception){
-                System.out.println("Error closing connection: "+ exception.getMessage());
-            }
         }
     return false;
     }
@@ -139,14 +105,6 @@ public class DatabaseManager{
             System.out.println("Quantity updated.");
         }catch(SQLException exception){
             System.out.println("Error updating quantity: " + exception.getMessage());
-        }finally{
-            try{
-                if(connection != null){
-                    connection.close();
-                }
-            }catch(SQLException exception){
-                System.out.println("Error closing connection: " + exception.getMessage());
-            }
         }
     }
 
@@ -180,14 +138,6 @@ public class DatabaseManager{
             stmt.executeUpdate(sql);
         }catch(SQLException exception){
             System.out.println("Error connecting to: " + exception.getMessage());
-        }finally{
-            try{
-                if(connection != null){
-                    connection.close();
-                }
-            }catch(SQLException exception){
-                System.out.println("Error closing connection: " + exception.getMessage());
-            }
         }
     }
 }
